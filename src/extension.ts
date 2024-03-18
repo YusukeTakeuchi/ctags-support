@@ -104,6 +104,7 @@ export function activate(context: vscode.ExtensionContext) {
 function loadTags(tagFilePath) {
     let tags = [];
     let liner = new LineByLine(tagFilePath);
+    const tagFileDir = path.dirname(tagFilePath);
     let line;
     let lineNumber = 0;
     while (line = liner.next()) {
@@ -130,7 +131,7 @@ function loadTags(tagFilePath) {
             description: "",
             label: tagName,
             detail: fileName,
-            filePath: path.join(vscode.workspace.rootPath, fileName),
+            filePath: path.join(tagFileDir, fileName),
             pattern: patternEscaped
         });
         lineNumber++;
