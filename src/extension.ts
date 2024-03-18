@@ -60,8 +60,12 @@ export function activate(context: vscode.ExtensionContext) {
     // The commandId parameter must match the command field in package.json
     let disposableFindTags = vscode.commands.registerCommand('extension.searchCTags', () => {
         console.log(vscode.workspace.workspaceFolders);
-        console.log("Read .tag file from:" + path.join(vscode.workspace.rootPath, vscode.workspace.getConfiguration('ctagsSupport').ctagsFilename));
-        let tags = loadTags(path.join(vscode.workspace.rootPath, vscode.workspace.getConfiguration('ctagsSupport').ctagsFilename));
+        const tagFilename = vscode.workspace.getConfiguration('ctagsSupport').ctagsFilename;
+        // if tagFilename is an absolute path, use it as is
+        // otherwise, use it as a relative path to the workspace root
+        const tagFilePath = path.isAbsolute(tagFilename) ? tagFilename : path.join(vscode.workspace.rootPath, tagFilename);
+        console.log("Read .tag file from:" + tagFilePath);
+        let tags = loadTags(tagFilePath);
         searchTags(context, tags);
     });
 
